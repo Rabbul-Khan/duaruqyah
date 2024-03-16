@@ -1,41 +1,51 @@
 'use client';
 import React from 'react';
 import { useState, useEffect } from 'react';
-import Image from 'next/image';
 import SubCategoryList from './SubCategoryList';
+import Image from 'next/image';
 
 const CategoryList = () => {
-  // Define a state variable "items" and a function "setItems" to update the state
   const [categories, setCategories] = useState([]);
 
-  // Use the useEffect hook to fetch data from the API endpoint when the component mounts
   useEffect(() => {
     fetch('http://localhost:3000/api/category', {
       method: 'GET',
       headers: {
-        'Content-Type': 'application/json', // Set the request headers to indicate JSON format
+        'Content-Type': 'application/json',
       },
     })
-      .then((res) => res.json()) // Parse the response data as JSON
-      .then((data) => setCategories(data)); // Update the state with the fetched data
+      .then((res) => res.json())
+      .then((data) => setCategories(data));
   }, []);
 
-  // Create a collection of JSX elements based on the fetched "items" data
-
-  // Return the JSX elements wrapped in a Material-UI Grid container
   return (
-    <>
+    <div className="flex flex-col gap-5 p-5">
       {categories.map((category) => {
         return (
-          // Use the Material-UI Grid component to display each item in a grid layout
-          <div key={category.id}>
-            <h2>{category.cat_name_en}</h2>
-            <p>subcategory: {category.no_of_subcat}</p>
+          <div key={category.id} className="bg-[#E8f0f5] rounded-md p-4 ">
+            <div className="grid grid-cols-[auto_1fr_auto] gap-3">
+              <Image
+                src="/dua-icon.png"
+                width={40}
+                height={40}
+                alt="dua-icon"
+              />
+              <div>
+                <h3 className="text-base font-semibold text-[#1FA45B]">
+                  {category.cat_name_en}
+                </h3>
+                <p className="text-sm text-[#7E7E7E] ">
+                  subcategory: {category.no_of_subcat}
+                </p>
+              </div>
+              <p>{category.no_of_dua} duas</p>
+            </div>
+
             <SubCategoryList catId={category.cat_id} />
           </div>
         );
       })}
-    </>
+    </div>
   );
 };
 
